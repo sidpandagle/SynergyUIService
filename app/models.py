@@ -9,20 +9,11 @@ class Category(Base):
     status = Column(String, server_default="active")
     created_at = Column(DateTime, server_default=func.now())
 
-class Subcategory(Base):
-    __tablename__ = "subcategory"
-
-    id = Column(Integer, primary_key=True, nullable=False)
-    category_id = Column(Integer, ForeignKey("category.id"), nullable=False)
-    title = Column(String, nullable=False)
-    status = Column(String, server_default="active")
-    created_at = Column(DateTime, server_default=func.now())
-
 class Code(Base):
     __tablename__ = "code"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    subcategory_id = Column(Integer, ForeignKey("subcategory.id"), nullable=False)
+    category_id = Column(Integer, ForeignKey("category.id"), nullable=False)
     title = Column(String, nullable=False)
     code = Column(String, nullable=False)
     status = Column(String, server_default="active")

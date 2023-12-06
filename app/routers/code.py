@@ -10,14 +10,14 @@ import os
 class CreateCode(BaseModel):
     title: str
     code: str
-    subcategory_id: int
+    category_id: int
 
 
 class GetCode(BaseModel):
     id: int
     title: str
     code: str
-    subcategory_id: int
+    category_id: int
     status: str
     created_at: str
 
@@ -26,7 +26,7 @@ class UpdateCode(BaseModel):
     id: int
     title: str
     code: str
-    subcategory_id: int
+    category_id: int
 
 
 class DeleteCode(BaseModel):

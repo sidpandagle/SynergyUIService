@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import models
 from .database import engine, get_db
 from .utils.rate_limit import limiter
-from app.routers import category, subcategory, code
+from app.routers import category,  code
 
 
 from slowapi.errors import RateLimitExceeded
@@ -47,6 +47,5 @@ async def root():
 
 
 app.include_router(category.router, prefix="/category", tags=["Category"])
-app.include_router(subcategory.router, prefix="/subcategory", tags=["Subcategory"])
 app.include_router(code.router, prefix="/code", tags=["Code"])
 
