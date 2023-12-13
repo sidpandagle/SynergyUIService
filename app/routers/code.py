@@ -37,6 +37,7 @@ class DeleteCode(BaseModel):
 router = APIRouter()
 
 
+# Get Code with Catgegory
 @router.get("/")
 async def get_Code(db: Session = Depends(get_db)):
     code_list = (
@@ -45,7 +46,40 @@ async def get_Code(db: Session = Depends(get_db)):
         .order_by(Code.id.asc())
         .all()
     )
-    return {"data": code_list}
+    result_list = []
+    for code in code_list:
+        result_list.append({
+            "id": code.id,
+            "title": code.title,
+            "code": code.code,
+            "status": code.status,
+            "created_at": code.created_at,
+            "category": code.category
+        })
+
+    return {"data": result_list}
+
+# Get Codes with CatgegoryID
+@router.get("/category/{category_id}")
+async def get_Code_by_category_id(category_id: int, db: Session = Depends(get_db)):
+    code_list = (
+        db.query(Code)
+        .filter(Code.status == "active" and  Code.category_id == category_id)
+        .order_by(Code.id.asc())
+        .all()
+    )
+    result_list = []
+    for code in code_list:
+        result_list.append({
+            "id": code.id,
+            "title": code.title,
+            "code": code.code,
+            "status": code.status,
+            "created_at": code.created_at,
+            "category": code.category.title
+        })
+
+    return {"data": result_list}
 
 
 @router.get("/{code_id}")

@@ -1,5 +1,6 @@
 from .database import Base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
+from sqlalchemy.orm import relationship
 
 class Category(Base):
     __tablename__ = "category"
@@ -8,6 +9,7 @@ class Category(Base):
     title = Column(String, nullable=False)
     status = Column(String, server_default="active")
     created_at = Column(DateTime, server_default=func.now())
+    codes = relationship("Code", back_populates="category")
 
 class Code(Base):
     __tablename__ = "code"
@@ -18,3 +20,4 @@ class Code(Base):
     code = Column(String, nullable=False)
     status = Column(String, server_default="active")
     created_at = Column(DateTime, server_default=func.now())
+    category = relationship("Category", back_populates="codes")
