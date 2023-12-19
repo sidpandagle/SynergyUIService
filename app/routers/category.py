@@ -7,6 +7,8 @@ from app.database import get_db
 from pydantic import BaseModel
 import os
 
+from app.routers.code import GetCode
+
 
 class CreateCategory(BaseModel):
     title: str
@@ -74,14 +76,14 @@ async def get_category_code_count(db: Session = Depends(get_db)):
 
     # Join the subquery with Category to get the title and filter by status
     result_list = (
-        db.query(Category.title, subquery.c.code_count)
+        db.query(Category.id, Category.title, subquery.c.code_count)
         .outerjoin(subquery, Category.id == subquery.c.category_id)
         .filter(Category.status == "active")
         .order_by(Category.id.asc())
         .all()
     )
 
-    return {"data": [{"category": title, "code_count": count} for title, count in result_list]}
+    return {"data": [{"id":id, "category": title, "code_count": count} for id, title, count in result_list]}
 
 @router.get("/{category_id}")
 async def get_category_by_id(category_id: int, db: Session = Depends(get_db)):
@@ -90,7 +92,7 @@ async def get_category_by_id(category_id: int, db: Session = Depends(get_db)):
         .filter(Category.id == category_id, Category.status == "active")
         .first()
     )
-    return {"data": categoryData}
+    return {"category_id": categoryData.id, "category_title": categoryData.title, "codes": categoryData.codes}
 
 
 @router.post("/")
